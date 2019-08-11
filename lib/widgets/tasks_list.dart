@@ -3,7 +3,8 @@ import 'package:todoey_flutter/widgets/task_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:todoey_flutter/models/task_data.dart';
 
-enum ConfirmAction { CANCEL, ACCEPT}
+enum ConfirmAction { NO, YES}
+
 Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
   return showDialog<ConfirmAction>(
     context: context,
@@ -15,15 +16,15 @@ Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
             'This will delete your task from list.'),
         actions: <Widget>[
           FlatButton(
-            child: const Text('CANCEL'),
+            child: const Text('NO'),
             onPressed: () {
-              Navigator.of(context).pop(ConfirmAction.CANCEL);
+              Navigator.of(context).pop(ConfirmAction.NO);
             },
           ),
           FlatButton(
-            child: const Text('ACCEPT'),
+            child: const Text('YES'),
             onPressed: () {
-              Navigator.of(context).pop(ConfirmAction.ACCEPT);
+              Navigator.of(context).pop(ConfirmAction.YES);
 
             },
           )
@@ -49,10 +50,9 @@ class TasksList extends StatelessWidget {
                 taskData.updateTask(task);
               },
               longPressCallback: () async {
-//                taskData.deleteTask(task);
                 final ConfirmAction action = await _asyncConfirmDialog(context);
                 print('Confirm Action $action');
-                if(action == ConfirmAction.ACCEPT) {
+                if(action == ConfirmAction.YES) {
                   taskData.deleteTask(task);
                 }
               },
